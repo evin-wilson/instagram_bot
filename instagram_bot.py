@@ -70,17 +70,10 @@ class User(object):
 		# ------------make a file listing the followers of the user------------
 		self.driver.find_element(*UserLocators.followers).click()  
 
-		#selecting the first follower in the list to focus the mouse on the dialogue box
-		WebDriverWait(self.driver, 30).until(
-			EC.presence_of_element_located(UserLocators.first_follower)
-			).click()
-
-    i=0
 		while True:
-			sleep(5)
-			ActionChains(self.driver).send_keys(Keys.END).perform()
-			print(f'{i} action')
-			i+=1
+			self.driver.execute_script("let a = document.getElementsByClassName('isgrP');\
+										a[0].scrollTo(0,document.body.scrollHeight)")
+			sleep(3)
 	
 	def following(self):
 		# make a file listing followings of the user
