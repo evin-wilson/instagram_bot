@@ -13,23 +13,20 @@ class MainPageLocators(object):
 
 
 class UserLocators(object):
-	username = (By.TAG_NAME, 'h1')
+	name = (By.CLASS_NAME, 'rhpdm')
 	no_of_post = (By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[1]/span/span')
 
-	followers_count = (By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a/span')
-	
+	ul_of_noPost_folower_folowi = (By.CLASS_NAME, 'g47SY ')
+
+	# followers_count = (By.XPATH, '//*[@id="react-root"]/div/div/section/main/div/header/section/ul/li[2]/a/span')
 	followers = (By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a')
 	
-	following_count = (By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a/span')
+	# following_count = (By.XPATH, '//*[@id="react-root"]/div/div/section/main/div/header/section/ul/li[3]/a/span')
 	following = (By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a')
 
-	# the dialogue box which popup when followers is clicked
-	followers_dialogue_box = (By.XPATH, "/html/body/div[5]")
-	first_follower = (By.XPATH, "/html/body/div[6]/div/div/div[2]/ul")
-	                           # /html/body/div[4]/div/div/div[2]/ul/div/li[1]
-	                           # /html/body/div[6]/div/div/div[2]/ul
-
-
+	# class name of h2 tag which display "This Account is Private"
+	isprivate = 'rkEop'
+	                         
 
 class Message(object):
 	pass
