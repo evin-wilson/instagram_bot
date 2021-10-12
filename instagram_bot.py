@@ -1,8 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 
 from time import sleep
 from locators import *
@@ -31,7 +30,7 @@ class instagram(object):
 			print('Exception is: ',e)
 			self.driver.quit()
 
-		self.popup_dismiss()	
+		self.popup_dismiss()
 
 	def popup_dismiss(self):
 		#----------Turn off the notifications when opening the instagram----------
@@ -50,32 +49,50 @@ class instagram(object):
 		self.driver.quit()
 
 
-class User(object):
+class User(instagram):
 
-	def __init__(self, userId, bot):
-		self.userId = userId
+	def __init__(self, username, bot):
+		self.username = username
 		self.driver = bot.driver
-		self.driver.get( f'http://www.instagram.com/{self.userId}/')
+		self.driver.get( f'http://www.instagram.com/{self.username}/')
+
+	def isprivate(self):
+		try:
+			self.driver.find_element_by_class_name(UserLocators.isprivate)
+			return True
+
+		except NoSuchElementException:
+			return False
 
 	def info(self): 
 		# -------------returns  details about the user------------- #
-		username = self.driver.find_element(*UserLocators.username).text
-		followers_count = self.driver.find_element(*UserLocators.followers_count).get_attribute('title')
-		following_count = self.driver.find_element(*UserLocators.following_count).text
-		no_of_post = self.driver.find_element(*UserLocators.no_of_post).text
+		try: name = self.driver.find_element(*UserLocators.name).text
+		except : name = None
 
-		return (username, no_of_post, followers_count, following_count)
+		details = self.driver.find_elements(*UserLocators.ul_of_noPost_folower_folowi)
 
-	def followers(self):
+		no_of_post = details[0].text
+		followers_count = details[1].get_attribute('title')
+		following_count= details[2].text
+
+		info = dict({'username': self.username,
+					 'name':name, 
+					 'no_of_post': no_of_post,
+					 'followers_count':followers_count,
+					 'following_count':following_count})
+
+		return info
+
+	def followers_list(self):
 		# ------------make a file listing the followers of the user------------
 		self.driver.find_element(*UserLocators.followers).click()  
 
 		while True:
 			self.driver.execute_script("let a = document.getElementsByClassName('isgrP');\
-										a[0].scrollTo(0,document.body.scrollHeight)")
+										a[0].scrollTo(0, document.body.scrollHeight)")
 			sleep(3)
 	
-	def following(self):
+	def following_list(self):
 		# make a file listing followings of the user
 		pass
 		
@@ -84,8 +101,4 @@ class User(object):
 
 	def like(self):
 		pass
-
-
-
-	
 	
