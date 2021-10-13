@@ -18,14 +18,15 @@ class UserLocators(object):
 
 	ul_of_noPost_folower_folowi = (By.CLASS_NAME, 'g47SY ')
 
-	# followers_count = (By.XPATH, '//*[@id="react-root"]/div/div/section/main/div/header/section/ul/li[2]/a/span')
 	followers = (By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a')
 	
-	# following_count = (By.XPATH, '//*[@id="react-root"]/div/div/section/main/div/header/section/ul/li[3]/a/span')
 	following = (By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a')
 
 	# class name of h2 tag which display "This Account is Private"
 	isprivate = 'rkEop'
+
+	# class name of li of followers
+	li_followers = (By.CLASS_NAME, 'wo9IH')
 	                         
 
 class Message(object):
