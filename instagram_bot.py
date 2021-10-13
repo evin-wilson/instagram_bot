@@ -83,14 +83,28 @@ class User(instagram):
 
 		return info
 
-	def followers_list(self):
+	def followers_list(self, count=400):
 		# ------------make a file listing the followers of the user------------
 		self.driver.find_element(*UserLocators.followers).click()  
 
-		while True:
-			self.driver.execute_script("let a = document.getElementsByClassName('isgrP');\
-										a[0].scrollTo(0, document.body.scrollHeight)")
+		followers_list = self.driver.find_elements(*UserLocators.li_followers)
+
+		while len(followers_list) < count:
+			self.driver.execute_script('''
+				let a = document.getElementsByClassName('isgrP');
+				a[0].scrollTo(0, a[0].scrollHeight);
+				a[0].scrollTop = a[0].scrollHeight;
+				''')
 			sleep(3)
+			print('in while... ', end=" ")
+			followers_list = self.driver.find_elements(*UserLocators.li_followers)
+			print(len(followers_list))
+
+		print('exited the while loop')
+		for follower in followers_list:
+			print(follower.get_attribute('title'))
+
+
 	
 	def following_list(self):
 		# make a file listing followings of the user
