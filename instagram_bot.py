@@ -38,10 +38,12 @@ class instagram(object):
 			saveinfo = WebDriverWait(self.driver, 5).until(
 			    EC.element_to_be_clickable(MainPageLocators.not_now), 'cannot find save info popup'
 				).click()
+		except: print('No saveinfo')
+		try: 
 			notification = WebDriverWait(self.driver, 2).until(
 			    EC.element_to_be_clickable(MainPageLocators.notification_turn_off), 'cannot find turn-off info popup'
 				).click()
-		except :pass
+		except :print('No notification')
 	
 	def die(self):
 		# close the browser
@@ -83,10 +85,11 @@ class User(instagram):
 
 		return info
 
-	def followers_list(self, count=400):
+	def followers_list(self, count=12):
 		# ------------make a file listing the followers of the user------------
 		self.driver.find_element(*UserLocators.followers).click()  
 
+		followers = []
 		followers_list = self.driver.find_elements(*UserLocators.li_followers)
 
 		while len(followers_list) < count:
@@ -96,15 +99,18 @@ class User(instagram):
 				a[0].scrollTop = a[0].scrollHeight;
 				''')
 			sleep(3)
-			print('in while... ', end=" ")
 			followers_list = self.driver.find_elements(*UserLocators.li_followers)
-			print(len(followers_list))
 
-		print('exited the while loop')
 		for follower in followers_list:
-			print(follower.get_attribute('title'))
+			a = follower.text.split('\n')
+			if len(a)==3:
+				a = a[:2]
+				followers.append(a)
+			else:
+				a[1] = None
+				followers.append(a)
 
-
+		return followers
 	
 	def following_list(self):
 		# make a file listing followings of the user
