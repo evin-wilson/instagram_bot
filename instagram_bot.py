@@ -67,7 +67,7 @@ class User(instagram):
 			return False
 
 	def info(self): 
-		# -------------returns  details about the user------------- #
+		# -------------returns a dict about the user------------- #
 		try: name = self.driver.find_element(*UserLocators.name).text
 		except : name = None
 		details = self.driver.find_elements(*UserLocators.ul_of_noPost_folower_folowi)
@@ -84,70 +84,48 @@ class User(instagram):
 
 		return info
 
-	def followers_list(self, count=12):
+	def __getlist(self, count):
+		ls = []
+		li_list = self.driver.find_elements(*UserLocators.li_follow_cls)
+
+		while len(li_list) < count:
+			self.driver.execute_script('''
+				let a = document.getElementsByClassName(arguments[0]);
+				a[0].scrollTo(0, a[0].scrollHeight);
+				a[0].scrollTop = a[0].scrollHeight;
+				''', UserLocators.div_cls)
+			sleep(3)
+			li_list = self.driver.find_elements(*UserLocators.li_follow_cls)
+
+		for elem in li_list:
+			# name = elem.find_element_by_class_name('wFPL8 ').text
+			# username = elem.find_element_by_class_name('FPmhX').text
+
+			a = elem.text.split('\n')
+			# this return a list of [<username>, ?verfied, <name>, 'Follow']
+
+			if len(a)==4:
+				# swaping the verifed and name field
+				a[2], a[1] = a[1], a[2]
+				ls.append(a[:3])
+			elif len(a)==3:
+				ls.append(a[:2])
+			else:
+				a[1] = None
+				ls.append(a)
+
+		return ls
+
+	def followers_list(self, count=10):
 		# Returns a list of list of username, name, ?verified of the followers
 		self.driver.find_element_by_partial_link_text("follower").click() 
-
-		followers = []
-		followers_list = self.driver.find_elements(*UserLocators.li_follow_cls)
-
-		while len(followers_list) < count:
-			self.driver.execute_script('''
-				let a = document.getElementsByClassName(arguments[0]);
-				a[0].scrollTo(0, a[0].scrollHeight);
-				a[0].scrollTop = a[0].scrollHeight;
-				''', UserLocators.div_cls)
-			sleep(3)
-			followers_list = self.driver.find_elements(*UserLocators.li_follow_cls)
-
-		for follower in followers_list:
-			a = follower.text.split('\n')
-			# this result in list of [<username>, ?verfied, <name>, 'Follow']
-
-			if len(a)==4:
-				# swaping the verifed and name field
-				a[2], a[1] = a[1], a[2]
-				followers.append(a[:3])
-			elif len(a)==3:
-				followers.append(a[:2])
-			else:
-				a[1] = None
-				followers.append(a)
-
-		return followers
+		return self.__getlist(count)
 	
 	def following_list(self, count=12):
-		# -----------Returns a list of list of username,name, ?verified of the followings-----------
-
+		# Returns a list of list of username,name, ?verified of the followings
 		self.driver.find_element_by_partial_link_text("following").click() 
 
-		following = []
-		following_list = self.driver.find_elements(*UserLocators.li_follow_cls)
-
-		while len(following_list) < count:
-			self.driver.execute_script('''
-				let a = document.getElementsByClassName(arguments[0]);
-				a[0].scrollTo(0, a[0].scrollHeight);
-				a[0].scrollTop = a[0].scrollHeight;
-				''', UserLocators.div_cls)
-			sleep(3)
-			following_list = self.driver.find_elements(*UserLocators.li_follow_cls)
-
-		for following in following_list:
-			a = following.text.split('\n')
-			# this result in list of [<username>, ?verfied, <name>, 'Follow']
-
-			if len(a)==4:
-				# swaping the verifed and name field
-				a[2], a[1] = a[1], a[2]
-				following.append(a[:3])
-			elif len(a)==3:
-				following.append(a[:2])
-			else:
-				a[1] = None
-				following.append(a)
-
-		return following
+		return self.__getlist(count)
 		
 	def chat(self):
 		pass
