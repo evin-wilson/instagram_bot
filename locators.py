@@ -6,21 +6,32 @@ class MainPageLocators(object):
 	login = (By.ID, "loginForm")
 	
 	# Popups locators
-	notification_turn_off = (By.XPATH, '/html/body/div[4]/div/div/div/div[3]/button[2]')
+	notification_turn_off = (By.XPATH, '/html/body/div[6]/div/div/div/div[3]/button[2]')
 	save_login_info_not_now = (By.XPATH, '//*[@id="react-root"]/section/main/div/div/div/div/button')
 
 class UserLocators(object):
-	name = (By.CLASS_NAME, 'rhpdm')
-	no_of_post = (By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[1]/span/span')
+	# class name of <h2> which display "Sorry, this page isn't available."
+	page_is_unavailable = (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/div/h2')
 
-	ul_of_noPost_folower_folowi = (By.CLASS_NAME, 'g47SY ')
+	# xpath of <span> containing name
+	name = (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/div[2]/span')
 
-	# class name of h2 tag which display "This Account is Private"
-	isprivate = (By.CLASS_NAME, 'rkEop')
+	# classname of the <span> containing no of post, followers count, following count
+	info = (By.CLASS_NAME, '_ac2a')
 
-	# class name of li of followers and following
-	li_follow_cls = (By.CLASS_NAME, 'wo9IH')
+	# class name of <h2> which display "This Account is Private"
+	isprivate = (By.CLASS_NAME, '_aa_u')
+
+	# class name of <li> of followers and following
+	li_follow_cls = (By.CLASS_NAME, '_aaei')
+
+	# close button in the dialoge box of followers and following
+	x_btn = (By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[1]/div/div[3]/div/button')
 
 	# used in js script
-	# class name of the div containg the list of followers and following
-	div_cls = 'isgrP'
+	# class name of the div containg the list of followers/following
+	# used div is immediate parent of the <ul> 
+	scroll_list = '_aano'
+
+	scroll_list_loc = (By.CLASS_NAME, scroll_list)
+

@@ -33,26 +33,38 @@ class instagram(object):
 			print('Exception is: ',e)
 			self.driver.quit()
 
-		self.popup_dismiss()
+		# self._popup_dismiss()
 
-	def popup_dismiss(self):
-		#----------Turn off the notifications when opening the instagram----------
+
+	def _popup_dismiss(self):
+		"""Turn off the notifications when opening the instagram"""
 		try:
 			saveinfo = WebDriverWait(self.driver, 5).until(
 			    EC.element_to_be_clickable(MainPageLocators.save_login_info_not_now), 'cannot find save info popup'
 				).click()
-		except TimeoutException as e: print(e)
-		try: 
+		except TimeoutException as e: pass
+	
+		try:
 			notification = WebDriverWait(self.driver, 2).until(
 			    EC.element_to_be_clickable(MainPageLocators.notification_turn_off), 'cannot find turn-off info popup'
 				).click()
-		except TimeoutException as e: print(e)
+		except TimeoutException as e: pass
 
 	def die(self):
-		# close the browser
+		"""close the browser"""
 		print('Bot is dead')
 		self.driver.quit()
 		
+	def get_followers_list(self, count=100):
+		"""Return a dict of followers of the bot"""
+		me = User(self.username, self.driver)
+		return me.get_followers_list(count)
+
+	def get_following_list(self):
+		"""Return a dict of following of the bot"""
+		me = User(self.username, self.driver)
+		return me.get_following_list()
 
 	def user(self, username):
+		"""Return the User Obj"""
 		return User(username, self.driver)
